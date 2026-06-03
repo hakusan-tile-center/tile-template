@@ -1,76 +1,40 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Company Tiles Viewer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地図タイル表示テスト</title>
 
-  <style>
-    html, body { height: 100%; margin: 0; padding: 0; }
-    #map { width: 100%; height: 100%; }
-  </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  html, body { height: 100%; margin: 0; }
+  #map { width: 100%; height: 100%; }
+</style>
 </head>
+
 <body>
-  <div id="map"></div>
+<div id="map"></div>
 
-  <script>
-    // tile-template 直下のフォルダを調べて tiles/5/ があるフォルダを探す
-    async function detectTileFolder() {
-      const res = await fetch('./');
-      const text = await res.text();
+<script>
+// ★ 地図の初期設定
+const map = L.map('map', {
+  center: [35.0, 137.0],
+  zoom: 12,
+  minZoom: 5,
+  maxZoom: 18
+});
 
-      // tile-template直下のフォルダ一覧を取得
-      const folderRegex = /href="([^"]+)\/"/g;
-      let persons = [];
-      let match;
-      while ((match = folderRegex.exec(text)) !== null) {
-        persons.push(match[1]);
-      }
+// ★ GitHub Pages 用のフルURL ＋ flipY=true（最重要）
+L.tileLayer('https://hakusan-tile-center.github.io/tile-template/katahira/tiles/{z}/{x}/{y}.png?flipY=true', {
+  minZoom: 5,
+  maxZoom: 18,
+  tms: true,
+  attribution: '© Your Tiles'
+}).addTo(map);
+</script>
 
-      // 各フォルダの中に tiles/5/ があるかチェック
-      for (const person of persons) {
-        const check = await fetch(`./${person}/tiles/5/`)
-          .then(r => r.ok)
-          .catch(() => false);
-
-        if (check) return person;
-      }
-
-      return null;
-    }
-
-    async function initMap() {
-      const person = await detectTileFolder();
-      if (!person) {
-        alert("タイルフォルダが見つかりません。\n各自のフォルダに tiles を入れてください。");
-        return;
-      }
-
-      // 自動検出したフォルダの tiles を読む
-      const tileUrl = `./${person}/tiles/{z}/{x}/{y}.png?flipY=true`;
-
-      const map = L.map('map', {
-        center: [35.0, 135.0],
-        zoom: 10,
-        minZoom: 5,
-        maxZoom: 20
-      });
-
-      L.tileLayer(tileUrl, {
-        minZoom: 5,
-        maxZoom: 20,
-        tms: true,
-        attribution: `© ${person}`
-      }).addTo(map);
-    }
-
-    initMap();
-  </script>
 </body>
 </html>
+
