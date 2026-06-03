@@ -27,8 +27,6 @@ const map = L.map('map', {
 });
 
 // ★ GitHub Pages 用のタイルURL（最重要）
-// ★ バッククォート禁止 → シングルクォートで囲む
-// ★ flipY=true と tms:true で TMS タイルに対応
 L.tileLayer('https://hakusan-tile-center.github.io/tile-template/katahira/tiles/{z}/{x}/{y}.png?flipY=true', {
   minZoom: 5,
   maxZoom: 20,
