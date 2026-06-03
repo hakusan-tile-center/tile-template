@@ -23,14 +23,14 @@ const map = L.map('map', {
   center: [35.0, 137.0],
   zoom: 12,
   minZoom: 5,
-  maxZoom: 18
+  maxZoom: 20
 });
 
 // ★ GitHub Pages 用のフルURL ＋ flipY=true（最重要）
 // ★ バッククォート禁止 → シングルクォートで囲む
 L.tileLayer('https://hakusan-tile-center.github.io/tile-template/katahira/tiles/{z}/{x}/{y}.png?flipY=true', {
   minZoom: 5,
-  maxZoom: 18,
+  maxZoom: 20,
   tms: true
 }).addTo(map);
 </script>
